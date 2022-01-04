@@ -22,6 +22,7 @@ from rexmex.metrics.rating import (
     root_mean_squared_error,
     symmetric_mean_absolute_percentage_error,
 )
+from rexmex.scorecard import ScoreCard
 from rexmex.utils import binarize, normalize
 
 
@@ -84,6 +85,22 @@ class MetricSet(dict):
         for name, metric in other_metric_set.items():
             new_metric_set[name] = metric
         return new_metric_set
+
+    def get_scorecard(self) -> ScoreCard:
+        """Get a scorecard."""
+        return ScoreCard(self)
+
+    def get_performance_metrics(self, *args, **kwargs):
+        """Get performance metrics via a ScoreCard."""
+        return self.get_scorecard().get_performance_metrics(*args, **kwargs)
+
+    def generate_report(self, *args, **kwargs):
+        """Generate a report via a ScoreCard."""
+        return self.get_scorecard().generate_report(*args, **kwargs)
+
+    def filter_scores(self, *args, **kwargs):
+        """Filter scores via a ScoreCard."""
+        return self.get_scorecard().filter_scores(*args, **kwargs)
 
 
 class ClassificationMetricSet(MetricSet):
