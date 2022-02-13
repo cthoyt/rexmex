@@ -1,6 +1,7 @@
 import numpy as np
 
-from rexmex.utils import normalize
+from rexmex.metrics.classification import accuracy_score
+from rexmex.utils import binarize, normalize
 
 
 def test_normalize():
@@ -17,3 +18,12 @@ def test_normalize():
 
     np.testing.assert_array_equal(y_true_norm, np.array([-1, -1, -1, 1, 1, 1]))
     np.testing.assert_allclose(y_score_norm, np.array([-0.8, -0.4, 0.0, 0.0, 0.4, 1.0]))
+
+
+def test_binning():
+    """Test binning."""
+    func_binned = binarize(accuracy_score)
+    y_true = np.array([0, 0, 0, 1, 1, 1])
+    y_score = np.array([0.1, 0.6, 0.9, 0.8, 0.7, 1.0])
+    res = func_binned(y_true, y_score)
+    assert 2 / 3 == res
